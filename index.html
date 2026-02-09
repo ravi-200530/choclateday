@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<title>Chocolate Day 🍫</title>
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:
+    radial-gradient(circle at top,#5b1e3c,#1a0c14);
+  font-family:'Segoe UI',sans-serif;
+  overflow:hidden;
+  color:#fff;
+}
+
+/* ---------- COMMON ---------- */
+.hidden{display:none;}
+.center{text-align:center;}
+button{
+  padding:12px 22px;
+  border:none;
+  border-radius:25px;
+  background:#ff5fa2;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,0,0,.4);
+}
+
+/* floating hearts */
+.heart{
+  position:absolute;
+  bottom:-20px;
+  font-size:18px;
+  animation:float 6s linear infinite;
+  opacity:.6;
+}
+@keyframes float{
+  to{transform:translateY(-110vh);opacity:0;}
+}
+
+/* ---------- STEP 1 : RIBBON ---------- */
+#step1 .box{
+  width:260px;
+  height:140px;
+  background:#3b160b;
+  border-radius:18px;
+  position:relative;
+  box-shadow:0 15px 35px rgba(0,0,0,.6);
+}
+.ribbon{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.ribbon::before,
+.ribbon::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:18px;
+  background:#e91e63;
+}
+.ribbon::after{
+  transform:rotate(90deg);
+}
+.knot{
+  width:30px;height:30px;
+  background:#ff4081;
+  border-radius:50%;
+  z-index:2;
+}
+.cut{
+  animation:cut 1s forwards;
+}
+@keyframes cut{
+  to{opacity:0;transform:scale(1.4);}
+}
+
+/* ---------- STEP 2 : WRAPPER ---------- */
+#step2 .wrapper{
+  width:240px;
+  height:520px;
+  background:#5a2a18;
+  border-radius:18px;
+  position:relative;
+  overflow:hidden;
+}
+.cover{
+  position:absolute;
+  inset:0;
+  background:#3b160b;
+  animation:remove 1.2s forwards;
+}
+@keyframes remove{
+  to{transform:translateX(-100%);}
+}
+
+/* ---------- STEP 3 : CHOCOLATE ---------- */
+.chocolate{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  grid-template-rows:repeat(8,1fr);
+  gap:6px;
+  padding:14px;
+  width:240px;
+  height:520px;
+  background:#2b120a;
+  border-radius:18px;
+  box-shadow:inset 0 0 25px rgba(0,0,0,.8);
+}
+.piece{
+  background:linear-gradient(145deg,#5a2a18,#3b160b);
+  border-radius:10px;
+  position:relative;
+  cursor:pointer;
+  overflow:hidden;
+  box-shadow:
+    inset -4px -4px 8px rgba(0,0,0,.6),
+    inset 3px 3px 6px rgba(255,255,255,.05);
+}
+.piece::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom right,
+    rgba(255,255,255,.18),transparent 60%);
+}
+.text{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:6px;
+  font-size:12px;
+  color:#ffb6c1;
+  opacity:0;
+  transform:scale(.6);
+  transition:.5s;
+}
+.piece.clicked{
+  animation:melt .6s forwards;
+}
+@keyframes melt{
+  to{transform:scale(.9);filter:blur(1px);}
+}
+.piece.clicked .text{
+  opacity:1;
+  transform:scale(1);
+}
+
+/* ---------- FINAL ---------- */
+#final{
+  text-align:center;
+  animation:fade 1s forwards;
+}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+</style>
+</head>
+<body>
+
+<!-- STEP 1 -->
+<div id="step1" class="center">
+  <h3>Cut the ribbon ✂️</h3>
+  <div class="box" onclick="cutRibbon()">
+    <div class="ribbon" id="ribbon">
+      <div class="knot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div id="step2" class="hidden center">
+  <h3>Open the sweetness 😌</h3>
+  <div class="wrapper">
+    <div class="cover"></div>
+  </div>
+  <br>
+  <button onclick="showChocolate()">Touch again 💕</button>
+</div>
+
+<!-- STEP 3 -->
+<div id="step3" class="hidden">
+  <div class="chocolate" id="chocolate"></div>
+</div>
+
+<!-- FINAL -->
+<div id="final" class="hidden">
+  <h2>Chocolate mudinjiduchu… 🍫</h2>
+  <h3>
+    aana…<br>
+    un mela irukura desire<br>
+    innum start aagala 😌❤️
+  </h3>
+</div>
+
+<script>
+/* hearts */
+for(let i=0;i<20;i++){
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerText="❤️";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDelay=Math.random()*5+"s";
+  document.body.appendChild(h);
+}
+
+/* flow */
+function cutRibbon(){
+  document.getElementById("ribbon").classList.add("cut");
+  setTimeout(()=>{
+    step1.classList.add("hidden");
+    step2.classList.remove("hidden");
+  },900);
+}
+function showChocolate(){
+  step2.classList.add("hidden");
+  step3.classList.remove("hidden");
+}
+
+/* chocolate squares */
+const lines=[
+"நீ தொட்டாலே melt ஆகுது 😘",
+"இந்த piece உனக்குத்தான் 💕",
+"உன் touch addictive 😌",
+"Chocolate கூட shy 😳",
+"உன் சிரிப்பு போதும் 😍",
+"இந்த bite காதலோட ❤️",
+"உன் கை மாயம் ✨",
+"Life sweet with you 💖",
+"Heart skip ஆகுது 😳",
+"Romance overload 😘",
+"Un mela craze 🫶",
+"Nee illa boring 😌",
+"Sweet memories 💕",
+"Melt aaguren 😘",
+"Only you 🍫",
+"Love inside 💖",
+"Un touch magic 😍",
+"Addicted to you 😌",
+"Heartbeat fast 😳",
+"Chocolate Day nee 💝",
+"Romantic vibes 😘",
+"Crazy love 🫶",
+"Forever sweet 💕",
+"Endless desire 😏"
+];
+const choco=document.getElementById("chocolate");
+let count=0;
+lines.forEach(l=>{
+  let p=document.createElement("div");
+  p.className="piece";
+  let t=document.createElement("div");
+  t.className="text";
+  t.innerText=l;
+  p.appendChild(t);
+  p.onclick=()=>{
+    if(!p.classList.contains("clicked")){
+      p.classList.add("clicked");
+      count++;
+      if(count===24){
+        setTimeout(()=>{
+          step3.classList.add("hidden");
+          final.classList.remove("hidden");
+        },900);
+      }
+    }
+  };
+  choco.appendChild(p);
+});
+</script>
+
+</body>
+</html>
